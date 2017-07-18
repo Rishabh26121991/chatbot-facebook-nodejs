@@ -105,7 +105,6 @@ app.post('/webhook/', function (req, res) {
 	console.log("******************************************************");
 	console.log(JSON.stringify(data));
     console.log(JSON.stringify(data.object));
-    console.log(data.object.toJSON());
     console.log("******************************************************");
 
 
