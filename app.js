@@ -113,38 +113,10 @@ app.post('/webhook/', function (req, res) {
 	// Make sure this is a page subscription
 		// Iterate over each entry
 		// There may be multiple if batched
-		data.entry.forEach(function (pageEntry) {
+
 			console.log("inside  data.entry.forEach(function (pageEntry) ");
-			var pageID = pageEntry.id;
-			var timeOfEvent = pageEntry.time;
-
-			// Iterate over each messaging event
-			pageEntry.messaging.forEach(function (messagingEvent) {
-				if (messagingEvent.optin) {
-					receivedAuthentication(messagingEvent);
-                    console.log("  receivedAuthentication(messagingEvent);  ");
-				} else if (messagingEvent.message) {
 					receivedMessage(messagingEvent);
-                    console.log("  receivedMessage(messagingEvent);  ");
-				} else if (messagingEvent.delivery) {
-					receivedDeliveryConfirmation(messagingEvent);
-                    console.log("  receivedDeliveryConfirmation(messagingEvent);  ");
-				} else if (messagingEvent.postback) {
-					receivedPostback(messagingEvent);
-                    console.log("  receivedPostback(messagingEvent);  ");
-				} else if (messagingEvent.read) {
-					receivedMessageRead(messagingEvent);
-                    console.log("  receivedMessageRead(messagingEvent);  ");
-				} else if (messagingEvent.account_linking) {
-					receivedAccountLink(messagingEvent);
-                    console.log("  receivedAccountLink(messagingEvent);  ");
-				} else {
-					console.log("Webhook received unknown messagingEvent: ", messagingEvent);
-				}
-			});
-		});
-
-        console.log("  All went well  ");
+            console.log("  All went well  ");
 
 		// Assume all went well.
 		// You must send back a 200, within 20 seconds
@@ -157,7 +129,6 @@ app.post('/webhook/', function (req, res) {
         speech: speech,
         displayText: speech,
         source: 'webhook-echo-sample'
-    });
 });
 
 
@@ -166,6 +137,7 @@ app.post('/webhook/', function (req, res) {
 
 function receivedMessage(event) {
 
+	console.log(" receivedMessage ");
 	var senderID = event.sender.id;
 	var recipientID = event.recipient.id;
 	var timeOfMessage = event.timestamp;
