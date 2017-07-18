@@ -104,10 +104,12 @@ app.post('/webhook/', function (req, res) {
 	var data = req.body;
 	console.log("******************************************************");
 	console.log(JSON.stringify(data));
+    console.log(JSON.stringify(data.object));
+    console.log(data.object);
     console.log("******************************************************");
 
 
-    var speech =  "ok I will assist you with the money transfer. Please provide some info." ;
+    var speech = "ok I will assist you with the money transfer. Please provide some info." ;
 
     return res.json({
         speech: speech,
@@ -330,6 +332,7 @@ function handleCardMessages(messages, sender) {
 
 
 function handleApiAiResponse(sender, response) {
+	console.log(" handleApiAiResponse ");
 	let responseText = response.result.fulfillment.speech;
 	let responseData = response.result.fulfillment.data;
 	let messages = response.result.fulfillment.messages;
@@ -388,6 +391,7 @@ function handleApiAiResponse(sender, response) {
 }
 
 function sendToApiAi(sender, text) {
+	console.log(" sendToApiAi ");
 
 	sendTypingOn(sender);
 	let apiaiRequest = apiAiService.textRequest(text, {
