@@ -11,21 +11,21 @@ const uuid = require('uuid');
 
 
 // Messenger API parameters
-if (!config.FB_PAGE_TOKEN) {
-	throw new Error('missing FB_PAGE_TOKEN');
-}
-if (!config.FB_VERIFY_TOKEN) {
-	throw new Error('missing FB_VERIFY_TOKEN');
-}
-if (!config.API_AI_CLIENT_ACCESS_TOKEN) {
-	throw new Error('missing API_AI_CLIENT_ACCESS_TOKEN');
-}
-if (!config.FB_APP_SECRET) {
-	throw new Error('missing FB_APP_SECRET');
-}
-if (!config.SERVER_URL) { //used for ink to static files
-	throw new Error('missing SERVER_URL');
-}
+// if (!config.FB_PAGE_TOKEN) {
+// 	throw new Error('missing FB_PAGE_TOKEN');
+// }
+// if (!config.FB_VERIFY_TOKEN) {
+// 	throw new Error('missing FB_VERIFY_TOKEN');
+// }
+// if (!config.API_AI_CLIENT_ACCESS_TOKEN) {
+// 	throw new Error('missing API_AI_CLIENT_ACCESS_TOKEN');
+// }
+// if (!config.FB_APP_SECRET) {
+// 	throw new Error('missing FB_APP_SECRET');
+// }
+// if (!config.SERVER_URL) { //used for ink to static files
+// 	throw new Error('missing SERVER_URL');
+// }
 
 
 
@@ -50,10 +50,7 @@ app.use(bodyParser.json())
 
 
 
-const apiAiService = apiai(config.API_AI_CLIENT_ACCESS_TOKEN, {
-	language: "en",
-	requestSource: "fb"
-});
+const apiAiService = apiai(config.API_AI_CLIENT_ACCESS_TOKEN);
 const sessionIds = new Map();
 
 // Index route
@@ -661,66 +658,66 @@ function sendAccountLinking(recipientId) {
 }
 
 
-function greetUserText(userId) {
-	//first read user firstname
-	request({
-		uri: 'https://graph.facebook.com/v2.7/' + userId,
-		qs: {
-			access_token: config.FB_PAGE_TOKEN
-		}
-
-	}, function (error, response, body) {
-		if (!error && response.statusCode == 200) {
-
-			var user = JSON.parse(body);
-
-			if (user.first_name) {
-				console.log("FB user: %s %s, %s",
-					user.first_name, user.last_name, user.gender);
-
-				sendTextMessage(userId, "Welcome " + user.first_name + '!');
-			} else {
-				console.log("Cannot get data for fb user with id",
-					userId);
-			}
-		} else {
-			console.error(response.error);
-		}
-
-	});
-}
+// function greetUserText(userId) {
+// 	//first read user firstname
+// 	request({
+// 		uri: 'https://graph.facebook.com/v2.7/' + userId,
+// 		qs: {
+// 			access_token: config.FB_PAGE_TOKEN
+// 		}
+//
+// 	}, function (error, response, body) {
+// 		if (!error && response.statusCode == 200) {
+//
+// 			var user = JSON.parse(body);
+//
+// 			if (user.first_name) {
+// 				console.log("FB user: %s %s, %s",
+// 					user.first_name, user.last_name, user.gender);
+//
+// 				sendTextMessage(userId, "Welcome " + user.first_name + '!');
+// 			} else {
+// 				console.log("Cannot get data for fb user with id",
+// 					userId);
+// 			}
+// 		} else {
+// 			console.error(response.error);
+// 		}
+//
+// 	});
+// }
 
 /*
  * Call the Send API. The message data goes in the body. If successful, we'll 
  * get the message id in a response 
  *
  */
-function callSendAPI(messageData) {
-	request({
-		uri: 'https://graph.facebook.com/v2.6/me/messages',
-		qs: {
-			access_token: config.FB_PAGE_TOKEN
-		},
-		method: 'POST',
-		json: messageData
-
-	}, function (error, response, body) {
-		if (!error && response.statusCode == 200) {
-			var recipientId = body.recipient_id;
-			var messageId = body.message_id;
-
-			if (messageId) {
-				console.log("Successfully sent message with id %s to recipient %s",
-					messageId, recipientId);
-			} else {
-				console.log("Successfully called Send API for recipient %s",
-					recipientId);
-			}
-		} else {
-			console.error("Failed calling Send API", response.statusCode, response.statusMessage, body.error);
-		}
-	});
-}
+// function callSendAPI(messageData) {
+// 	request({
+// 		uri: 'https://graph.facebook.com/v2.6/me/messages',
+// 		qs: {
+// 			access_token: config.FB_PAGE_TOKEN
+// 		},
+// 		method: 'POST',
+// 		json: messageData
+//
+// 	}, function (error, response, body) {
+// 		if (!error && response.statusCode == 200) {
+// 			var recipientId = body.recipient_id;
+// 			var messageId = body.message_id;
+//
+// 			if (messageId) {
+// 				console.log("Successfully sent message with id %s to recipient %s",
+// 					messageId, recipientId);
+// 			} else {
+// 				console.log("Successfully called Send API for recipient %s",
+// 					recipientId);
+// 			}
+// 		} else {
+// 			console.error("Failed calling Send API", response.statusCode, response.statusMessage, body.error);
+// 		}
+// 	});
+// }
 
 
 
@@ -854,25 +851,25 @@ function receivedAuthentication(event) {
  * https://developers.facebook.com/docs/graph-api/webhooks#setup
  *
  */
-function verifyRequestSignature(req, res, buf) {
-	var signature = req.headers["x-hub-signature"];
-
-	if (!signature) {
-		throw new Error('Couldn\'t validate the signature.');
-	} else {
-		var elements = signature.split('=');
-		var method = elements[0];
-		var signatureHash = elements[1];
-
-		var expectedHash = crypto.createHmac('sha1', config.FB_APP_SECRET)
-			.update(buf)
-			.digest('hex');
-
-		if (signatureHash != expectedHash) {
-			throw new Error("Couldn't validate the request signature.");
-		}
-	}
-}
+// function verifyRequestSignature(req, res, buf) {
+// 	var signature = req.headers["x-hub-signature"];
+//
+// 	if (!signature) {
+// 		throw new Error('Couldn\'t validate the signature.');
+// 	} else {
+// 		var elements = signature.split('=');
+// 		var method = elements[0];
+// 		var signatureHash = elements[1];
+//
+// 		var expectedHash = crypto.createHmac('sha1', config.FB_APP_SECRET)
+// 			.update(buf)
+// 			.digest('hex');
+//
+// 		if (signatureHash != expectedHash) {
+// 			throw new Error("Couldn't validate the request signature.");
+// 		}
+// 	}
+// }
 
 function isDefined(obj) {
 	if (typeof obj == 'undefined') {
