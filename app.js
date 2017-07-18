@@ -183,22 +183,25 @@ function handleApiAiAction(sender, action, responseText, contexts, parameters) {
 	switch (action) {
 		case "job-enquiry":
 			let replies = [
-                        {
-                            "content_type": "text",
-                            "title": "Accountant",
-                            "payload": "Accountant"
-                        },
-                        {
-                            "content_type": "text",
-                            "title": "Sales",
-                            "payload": "Sales"
-                        },
-						{
-							"content_type": "text",
-							"title": "NOT INTERESTED",
-							"payload": "NOT INTERESTED"
-						}
-                    ];
+                {
+                    "name": "text",
+                    "text": "Accountant",
+                    "type": "button",
+                    "value": "Accountant"
+                },
+                {
+                    "name": "text",
+                    "text": "Sales",
+                    "type": "button",
+                    "value": "Sales"
+                },
+                {
+                    "name": "text",
+                    "text": "Not Interested",
+                    "type": "button",
+                    "value": "Not Interested"
+                }
+            ];
 			        sendQuickReply(sender, responseText, replies);
                     break;
 		default:
@@ -692,32 +695,51 @@ function sendAccountLinking(recipientId) {
  * get the message id in a response 
  *
  */
-// function callSendAPI(messageData) {
-// 	request({
-// 		uri: 'https://graph.facebook.com/v2.6/me/messages',
-// 		qs: {
-// 			access_token: config.FB_PAGE_TOKEN
-// 		},
-// 		method: 'POST',
-// 		json: messageData
-//
-// 	}, function (error, response, body) {
-// 		if (!error && response.statusCode == 200) {
-// 			var recipientId = body.recipient_id;
-// 			var messageId = body.message_id;
-//
-// 			if (messageId) {
-// 				console.log("Successfully sent message with id %s to recipient %s",
-// 					messageId, recipientId);
-// 			} else {
-// 				console.log("Successfully called Send API for recipient %s",
-// 					recipientId);
-// 			}
-// 		} else {
-// 			console.error("Failed calling Send API", response.statusCode, response.statusMessage, body.error);
-// 		}
-// 	});
-// }
+function callSendAPI(messageData) {
+	request({
+		uri: '',
+		qs: {
+			
+		},
+		method: 'POST',
+		json: messageData
+
+	}, function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+			var recipientId = body.recipient_id;
+			var messageId = body.message_id;
+
+			if (messageId) {
+				console.log("Successfully sent message with id %s to recipient %s",
+					messageId, recipientId);
+			} else {
+				console.log("Successfully called Send API for recipient %s",
+					recipientId);
+			}
+		} else {
+			console.error("Failed calling Send API", response.statusCode, response.statusMessage, body.error);
+		}
+	});
+}
+
+
+var apiai = require('apiai');
+
+var app = apiai("<your client access token>");
+
+var request = app.textRequest('<Your text query>', {
+    sessionId: '<unique session id>'
+});
+
+request.on('response', function(response) {
+    console.log(response);
+});
+
+request.on('error', function(error) {
+    console.log(error);
+});
+
+request.end();
 
 
 
