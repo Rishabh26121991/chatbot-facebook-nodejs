@@ -9,6 +9,30 @@ const request = require('request');
 const app = express();
 const uuid = require('uuid');
 
+// 'use strict';
+//
+// const express = require('express');
+// const bodyParser = require('body-parser');
+//
+// const app = express();
+//
+// app.use(bodyParser.urlencoded({
+//     extended: true
+// }));
+//
+// app.use(bodyParser.json());
+//
+// app.post('/echo', function(req, res) {
+//
+//     var speech = req.body.result && req.body.result.parameters && req.body.result.parameters.echoTest ? "ok I will assist you with the money transfer. Please provide some info." : "Seems like some problem. Speak again.";
+//
+//     return res.json({
+//         speech: speech,
+//         displayText: speech,
+//         source: 'webhook-echo-sample'
+//     });
+// });
+
 
 // Messenger API parameters
 // if (!config.FB_PAGE_TOKEN) {
@@ -78,7 +102,9 @@ app.get('/', function (req, res) {
  */
 app.post('/webhook/', function (req, res) {
 	var data = req.body;
+	console.log("******************************************************");
 	console.log(JSON.stringify(data));
+    console.log("******************************************************");
 
 
 
