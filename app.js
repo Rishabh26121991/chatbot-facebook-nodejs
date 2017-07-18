@@ -107,6 +107,13 @@ app.post('/webhook/', function (req, res) {
     console.log("******************************************************");
 
 
+    var speech =  "ok I will assist you with the money transfer. Please provide some info." ;
+
+    return res.json({
+        speech: speech,
+        displayText: speech,
+        source: 'webhook-echo-sample'
+    });
 
 	// Make sure this is a page subscription
 	if (data.object == 'page') {
@@ -215,6 +222,7 @@ function handleEcho(messageId, appId, metadata) {
 }
 
 function handleApiAiAction(sender, action, responseText, contexts, parameters) {
+    console.log("handleApiAiAction");
 	switch (action) {
 		case "job-enquiry":
 			let replies = [
@@ -731,6 +739,7 @@ function sendAccountLinking(recipientId) {
  *
  */
 function callSendAPI(messageData) {
+    console.log(" call send Api ");
 	request({
 		uri: '',
 		qs: {
