@@ -105,21 +105,13 @@ app.post('/webhook/', function (req, res) {
 	console.log("******************************************************");
 	console.log(JSON.stringify(data));
     console.log(JSON.stringify(data.object));
-    console.log(data.object);
+    console.log(data.object.toJSON());
     console.log("******************************************************");
 
 
-    var speech = "ok I will assist you with the money transfer. Please provide some info." ;
 
-    return res.json({
-        speech: speech,
-        displayText: speech,
-        source: 'webhook-echo-sample'
-    });
 
 	// Make sure this is a page subscription
-	if (data.object == 'page') {
-        console.log("  if (data.object == 'page')  ");
 		// Iterate over each entry
 		// There may be multiple if batched
 		data.entry.forEach(function (pageEntry) {
@@ -157,7 +149,15 @@ app.post('/webhook/', function (req, res) {
 		// Assume all went well.
 		// You must send back a 200, within 20 seconds
 		res.sendStatus(200);
-	}
+
+
+    var speech = "ok I will assist you with the money transfer. Please provide some info." ;
+
+    return res.json({
+        speech: speech,
+        displayText: speech,
+        source: 'webhook-echo-sample'
+    });
 });
 
 
